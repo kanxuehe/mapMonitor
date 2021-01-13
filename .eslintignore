@@ -1,0 +1,7 @@
+/lambda/
+/scripts
+--no-ignore /config
+.history
+!.prettierrc.js
+!.stylelintrc.js
+/dist
