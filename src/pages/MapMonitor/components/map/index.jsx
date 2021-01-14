@@ -27,7 +27,7 @@ const Map = props => {
       geo: {
         map: "",
         aspectScale: 0.85,
-        // layoutCenter: ["35%", "50%"], // 地图位置
+        layoutCenter: ["35%", "50%"], // 地图位置
         layoutSize: "100%",
         itemStyle: {
           normal: {
@@ -40,51 +40,32 @@ const Map = props => {
             areaColor: "#276fce",
           },
         },
-        regions: [
-          // {
-          //   name: "南海诸岛",
-          //   itemStyle: {
-          //     areaColor: "rgba(0, 10, 52, 1)",
-          //     borderColor: "rgba(0, 10, 52, 1)",
-          //     normal: {
-          //       opacity: 0,
-          //       label: {
-          //         show: false,
-          //         color: "#009cc9",
-          //       },
-          //     },
-          //   },
-          //   label: {
-          //     show: false,
-          //     color: "#FFFFFF",
-          //     fontSize: 12,
-          //   },
-          // },
-        ],
       },
       tooltip: {
+        show: true,
         trigger: "item",
+        backgroundColor: 'rgba(0,0,0,0)',
+        formatter: value => `<div class=${style.mapTooltip}>
+        <div class=${style.mapTooltipTitle}>${value.name}</div>
+        <div><span class=${style.mapTooltipTotal}>项目总数：</span><span class=${style.mapTooltipUnit}>102</span></div>
+        <div><span class=${style.mapTooltipTotal}>金额总数：</span><span class=${style.mapTooltipUnit}>1502145.88</span></div>
+
+        </div>`,
       },
       series: [
         {
           type: "map",
           mapType: "HZ",
-          data: [],
-          tooltip: {
-            show: false,
-            trigger: "item",
-            // formatter: value => `${value.name}: 告警数量${value.data.value2}`,
-          },
-          // aspectScale: 0.85,
+          aspectScale: 0.75,
           // layoutCenter: ["35%", "50%"], // 地图位置
           layoutSize: "100%",
           zoom: 1, // 当前视角的缩放比例
           // roam: true, //是否开启平游或缩放
-          scaleLimit: {
-            // 滚轮缩放的极限控制
-            min: 1,
-            max: 2,
-          },
+          // scaleLimit: {
+          //   // 滚轮缩放的极限控制
+          //   min: 1,
+          //   max: 2,
+          // },
           itemStyle: {
             normal: {
               areaColor: "#0c274b",
@@ -103,14 +84,7 @@ const Map = props => {
           type: "effectScatter",
           coordinateSystem: "geo",
           z: 12,
-          tooltip: {
-            trigger: "item",
-            // formatter: value =>
-            //   `${value.name}: 告警数量${
-            //     value.data.value2 ? value.data.value2 : 0
-            //   }`,
-          },
-          symbolSize: 7, //点的大小
+          symbolSize: 6, //点的大小
           showEffectOn: "render",
           rippleEffect: {
             period: 2,
@@ -118,7 +92,21 @@ const Map = props => {
             brushType: "fill",
           },
           hoverAnimation: true,
-          data: a,
+          data: [
+            { name: "", value: [590, 360] },
+            { name: "", value: [595, 380] },
+            { name: "", value: [640, 330] },
+            { name: "", value: [585, 320] },
+            { name: "", value: [560, 370] },
+            { name: "", value: [590, 330] },
+            { name: "萧山区", value: [680, 340] },
+            { name: "余杭区", value: [520, 300] },
+            { name: "富阳市", value: [490, 450] },
+            { name: "临安市", value: [340, 360] },
+            { name: "桐庐县", value: [400, 480] },
+            { name: "淳安县", value: [240, 550] },
+            { name: "建德市", value: [400, 600] },
+          ],
           label: {
             normal: {
               show: true,
@@ -126,9 +114,9 @@ const Map = props => {
                 color: "#fff",
               },
               padding: [0, 0, -50, 0],
-              // formatter(item) {
-              //   return item.name
-              // },
+              formatter(item) {
+                return item.name
+              },
             },
             emphasis: {
               show: false,

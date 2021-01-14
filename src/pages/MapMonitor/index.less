@@ -55,12 +55,12 @@
     background-image: url("../../assets/组 234@2x.png");
     background-size: 100% 100%;
     width: 500px;
-    height: 360px;
+    height: 370px;
   }
 }
 .modContent {
-  padding-top: 60px;
-  padding-bottom: 50px;
+  padding-top: 54px;
+  padding-bottom: 40px;
   ol {
     overflow: auto;
     height: 100%;
@@ -115,15 +115,64 @@
       }
     }
   }
+  .rightTopUl {
+    overflow: auto;
+    height: 100%;
+    padding: 0 53px 0 55px;
+    li {
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      height: 16px;
+      font-size: 16px;
+      font-family: Source Han Sans CN;
+      font-weight: 400;
+      color: #ffffff;
+      &:not(:first-of-type) {
+        margin-top: 25px;
+      }
+      span:nth-child(2) {
+        height: 20px;
+        line-height: 20px;
+        font-size: 20px;
+        font-family: Source Han Sans CN;
+        font-weight: 400;
+        color: #ffd200;
+      }
+    }
+  }
+  .leftBottomUl{
+    overflow: auto;
+    height: 100%;
+    padding: 0 26px 0 29px;
+    li {
+      cursor: pointer;
+      display: flex;
+      justify-content: flex-start;
+      align-items: center;
+      height: 16px;
+      font-size: 16px;
+      font-family: Source Han Sans CN;
+      font-weight: 400;
+      color: #ffffff;
+      &:not(:first-of-type) {
+        margin-top: 35px;
+      }
+      span:first-child{
+        margin-right: 35px;
+      }
+    }
+  }
 }
 
 .leftBottom,
 .rightBottom {
-  div {
+  >div {
     background-image: url("../../assets/组 234@2x.png");
     background-size: 100% 100%;
     width: 500px;
-    height: 360px;
+    height: 370px;
   }
 }
 .mainCenter {
