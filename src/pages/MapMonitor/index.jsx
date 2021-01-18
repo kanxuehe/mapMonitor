@@ -9,74 +9,11 @@ import style from "./index.less"
 import { provinceIds } from "./config"
 import Map from "./components/map/index.jsx"
 import headerImg from "../../assets/头部@2x.png"
+import { duration } from "moment"
 
 class MapMonitor extends Component {
   state = {
     mockData: [],
-    noticeList: [
-      {
-        title: "通知公告的标题这里是通知公告的标题",
-        time: "2020-10-10",
-      },
-      {
-        title: "通知公告的标题这里是通知公告的标题",
-        time: "2020-10-10",
-      },
-      {
-        title: "通知公告的标题这里是通知公告的标题",
-        time: "2020-10-10",
-      },
-      {
-        title: "通知公告的标题这里是通知公告的标题",
-        time: "2020-10-10",
-      },
-      {
-        title: "通知公告的标题这里是通知公告的标题",
-        time: "2020-10-10",
-      },
-      {
-        title: "通知公告的标题这里是通知公告的标题",
-        time: "2020-10-10",
-      },
-      {
-        title: "通知公告的标题这里是通知公告的标题",
-        time: "2020-10-10",
-      },
-      {
-        title: "通知公告的标题这里是通知公告的标题",
-        time: "2020-10-10",
-      },
-    ],
-    rightTopList: [
-      {
-        title: "已申报项目数",
-        time: 680,
-      },
-      {
-        title: "已申报金额",
-        time: "88888888.88元",
-      },
-      {
-        title: "已申报的公司数",
-        time: 168,
-      },
-      {
-        title: "未申报公司数",
-        time: 88,
-      },
-      {
-        title: "待审核数",
-        time: 25,
-      },
-      {
-        title: "申报已通过数",
-        time: 259,
-      },
-      {
-        title: "申报未通过数",
-        time: 21,
-      },
-    ],
   }
   changeAll = () => {
     // const { dispatch, allData } = this.props
@@ -93,21 +30,15 @@ class MapMonitor extends Component {
     // })
   }
   draw = () => {
+    console.log(this.props.historyList)
+    const x = this.props.historyList.map(d => d.year)
+    const counts = this.props.historyList.map(d => d.count)
+    const amounts = this.props.historyList.map(d => d.amount)
     const myChart = echarts.init(document.getElementById("thrend-chart"))
     const option = {
       xAxis: {
         type: "category",
-        data: [
-          "2013",
-          "2014",
-          "2015",
-          "2016",
-          "2017",
-          "2018",
-          "2019",
-          "2020",
-          "2021",
-        ],
+        data: x,
         axisLine: {
           lineStyle: {
             color: "#7B7B7B",
@@ -178,13 +109,13 @@ class MapMonitor extends Component {
       series: [
         {
           name: "总金额",
-          data: [820, 932, 901, 934, 1290, 1330, 1320, 1111, 1400],
+          data: amounts,
           type: "line",
           symbol: "none",
         },
         {
           name: "总项目数",
-          data: [221, 331, 341, 194, 129, 133, 120, 222, 333],
+          data: counts,
           type: "line",
           symbol: "none",
         },
@@ -381,12 +312,59 @@ class MapMonitor extends Component {
     }
     myChart.setOption(option)
   }
+
+  getNoticeList = () => {
+    const { dispatch } = this.props
+    dispatch({
+      type: "mapMonitor/getNoticeList",
+      payload: {
+        pageNum: 1,
+        pageSize: 8,
+      },
+    })
+  }
+
+  getSummary = () => {
+    const { dispatch } = this.props
+    dispatch({
+      type: "mapMonitor/getSummary",
+    })
+  }
+
+  getComapny = () => {
+    const { dispatch } = this.props
+    dispatch({
+      type: "mapMonitor/getComapny",
+    })
+  }
+
+  getZone = () => {
+    const { dispatch } = this.props
+    dispatch({
+      type: "mapMonitor/getZone",
+    })
+  }
+
+  getHistory = async () => {
+    const { dispatch } = this.props
+    await dispatch({
+      type: "mapMonitor/getHistory",
+    })
+    await this.draw()
+  }
   componentDidMount() {
-    this.draw()
+    this.getNoticeList()
+    this.getSummary()
+    this.getComapny()
+    this.getZone()
+    this.getHistory()
+    // this.draw()
     this.drawLeftBottom()
   }
   render() {
-    const { noticeList, rightTopList } = this.state
+    const { noticeList, summaryList } = this.props
+
+    console.log(noticeList, this.props, "---")
     return (
       <div className={style.Wrapper}>
         <div className={style.header}>
@@ -400,12 +378,14 @@ class MapMonitor extends Component {
                 <ol>
                   {noticeList.map(item => {
                     return (
-                      <li>
+                      <li key={item.noticeId}>
                         <span>
-                          <i />
-                          {item.title}
+                          <span className={style.text}>
+                            <i />
+                            {item.noticeTitle}
+                          </span>
                         </span>
-                        <span>{item.time}</span>
+                        <span className={style.time}>{item.createTime}</span>
                       </li>
                     )
                   })}
@@ -437,9 +417,9 @@ class MapMonitor extends Component {
               <p className={style.modTitle}>当前申报情况分析</p>
               <div className={style.modContent}>
                 <ul className={style.rightTopUl}>
-                  {rightTopList.map(item => {
+                  {summaryList.map(item => {
                     return (
-                      <li>
+                      <li key={item.title}>
                         <span>{item.title}</span>
                         <span>{item.time}</span>
                       </li>
@@ -460,7 +440,9 @@ class MapMonitor extends Component {
 }
 
 export default connect(({ mapMonitor, login, loading }) => ({
-  // list: home.list,
+  noticeList: mapMonitor.noticeList,
+  summaryList: mapMonitor.summaryList,
+  historyList: mapMonitor.historyList,
   // industryX: home.industryX,
   // industryY: home.industryY,
   // machineList: home.machineList,

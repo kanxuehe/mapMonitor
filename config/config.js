@@ -123,12 +123,12 @@ export default defineConfig({
   title: false,
   ignoreMomentLocale: true,
   proxy: {
-    "/api/": {
-      target: "http://jxappserver.jiuxiniot.com:8080",
+    "/prod-api/": {
+      target: "http://47.99.81.226/prod-api/",
       // target: 'http://192.168.0.172:8090',
       // target: 'http://192.168.0.144:8799',
       changeOrigin: true,
-      pathRewrite: { "^/api": "" },
+      pathRewrite: { "^/prod-api": "" },
     },
   },
   manifest: {

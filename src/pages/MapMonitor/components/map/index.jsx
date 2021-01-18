@@ -7,11 +7,16 @@ import "echarts/map/js/province/zhejiang"
 import { geoCoordMap, mapData } from "../../config"
 import style from "./index.less"
 const Map = props => {
-  const a = mapData.features.map(item => ({
-    name: item.properties.name,
-    value: item.properties.center,
-  }))
-  console.log(a)
+  const a = mapData.features.map(item => {
+    let value = []
+    item.properties.acroutes.map(o => {
+      value.push(o / 1000)
+    })
+    return {
+      name: item.properties.name,
+      value: value,
+    }
+  })
   function draw() {
     const myChart = echarts.init(document.getElementById("map-chart"))
     const option = {
@@ -44,7 +49,7 @@ const Map = props => {
       tooltip: {
         show: true,
         trigger: "item",
-        backgroundColor: 'rgba(0,0,0,0)',
+        backgroundColor: "rgba(0,0,0,0)",
         formatter: value => `<div class=${style.mapTooltip}>
         <div class=${style.mapTooltipTitle}>${value.name}</div>
         <div><span class=${style.mapTooltipTotal}>项目总数：</span><span class=${style.mapTooltipUnit}>102</span></div>

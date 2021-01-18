@@ -4,7 +4,7 @@
  */
 import { extend } from "umi-request"
 import { notification } from "antd"
-
+import cookie from 'react-cookies'
 const codeMessage = {
   200: "服务器成功返回请求的数据。",
   201: "新建或修改数据成功。",
@@ -48,7 +48,9 @@ const errorHandler = error => {
 
   return response
 }
-const token = localStorage.getItem("token")
+const cookies = cookie.load('Admin-Token')
+console.log(cookies,'cookies')
+// const token = localStorage.getItem("token")
 /**
  * 配置request请求时的默认参数
  */
@@ -58,7 +60,7 @@ const request = extend({
   // 默认错误处理
   credentials: "include", // 默认请求是否带上cookie
   headers: {
-    Authorization: token || "",
+    Authorization: cookies ? `Bearer ${cookies}` : "eyJhbGciOiJIUzUxMiJ9.eyJsb2dpbl91c2VyX2tleSI6IjlkOWJmZTc5LTk0NGYtNDgyYS1hMWZlLWIyNjhjMTI1YTZhMiJ9.nNFwZ8uQLKvAwzYFPGtTpDYe1p1Y6J46cPPcmoye0radpPWYwxZrOJXtmKKtUTSwUAq_0qGo1wpBzEFW9P6ULQ",
   },
 })
 export default request
