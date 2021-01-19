@@ -7,14 +7,10 @@ import "echarts/map/js/province/zhejiang"
 import { geoCoordMap, mapData } from "../../config"
 import style from "./index.less"
 const Map = props => {
-  const a = mapData.features.map(item => {
-    let value = []
-    item.properties.acroutes.map(o => {
-      value.push(o / 1000)
-    })
+  const positionData = mapData.features.map(item => {
     return {
       name: item.properties.name,
-      value: value,
+      value: item.properties.centroid,
     }
   })
   function draw() {
@@ -30,9 +26,9 @@ const Map = props => {
       //   },
       // ],
       geo: {
-        map: "",
-        aspectScale: 0.85,
-        layoutCenter: ["35%", "50%"], // 地图位置
+        map: "HZ",
+        // aspectScale: 0.75,
+        // layoutCenter: ["35%", "50%"], // 地图位置
         layoutSize: "100%",
         itemStyle: {
           normal: {
@@ -61,7 +57,7 @@ const Map = props => {
         {
           type: "map",
           mapType: "HZ",
-          aspectScale: 0.75,
+          // aspectScale: 0.75,
           // layoutCenter: ["35%", "50%"], // 地图位置
           layoutSize: "100%",
           zoom: 1, // 当前视角的缩放比例
@@ -97,21 +93,7 @@ const Map = props => {
             brushType: "fill",
           },
           hoverAnimation: true,
-          data: [
-            { name: "", value: [590, 360] },
-            { name: "", value: [595, 380] },
-            { name: "", value: [640, 330] },
-            { name: "", value: [585, 320] },
-            { name: "", value: [560, 370] },
-            { name: "", value: [590, 330] },
-            { name: "萧山区", value: [680, 340] },
-            { name: "余杭区", value: [520, 300] },
-            { name: "富阳市", value: [490, 450] },
-            { name: "临安市", value: [340, 360] },
-            { name: "桐庐县", value: [400, 480] },
-            { name: "淳安县", value: [240, 550] },
-            { name: "建德市", value: [400, 600] },
-          ],
+          data: positionData,
           label: {
             normal: {
               show: true,
@@ -120,7 +102,19 @@ const Map = props => {
               },
               padding: [0, 0, -50, 0],
               formatter(item) {
-                return item.name
+                const hideName = [
+                  "下城区",
+                  "江干区",
+                  "西湖区",
+                  "拱墅区",
+                  "上城区",
+                  "滨江区",
+                ]
+                if (hideName.indexOf(item.name) == -1) {
+                  return item.name || ""
+                } else {
+                  return ""
+                }
               },
             },
             emphasis: {
